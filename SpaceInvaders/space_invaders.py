@@ -40,4 +40,27 @@ player.speed(0)
 player.setposition(0, -250)
 player.setheading(90)
 
+player_speed = 15  # controls the movement speed of the player
+
+
+# move the player left and right
+def move_left():
+    x = player.xcor()  # gets player xcoord
+    x -= player_speed
+    player.setx(x)
+
+
+def move_right():
+    x = player.xcor()  # gets player xcoord
+    x += player_speed
+    player.setx(x)
+
+
+# create keyboard bindings
+turtle.listen()
+turtle.onkey(move_left, "Left")
+turtle.onkey(move_right, "Right")
+
+turtle.done()
+
 delay = input('Press enter to close')
