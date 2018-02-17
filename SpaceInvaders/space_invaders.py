@@ -8,3 +8,5 @@
     Description:
     basic space invaders game to practice rendering
 """
+
+print('space invaders test')
