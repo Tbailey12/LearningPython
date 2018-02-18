@@ -13,6 +13,7 @@
 import turtle
 import os
 import math
+import random
 
 # screen setup
 win = turtle.Screen()
@@ -43,13 +44,24 @@ player.setheading(90)
 
 player_speed = 15  # controls the movement speed of the player
 
+# choose a number of enemies
+number_of_enemies = 5
+enemies = list()
+
+# add enemies to list
+for i in range(number_of_enemies):
+    enemies.append(turtle.Turtle())
+
 # create the enemy turtle
-enemy = turtle.Turtle()
-enemy.color('red')
-enemy.shape('circle')
-enemy.penup()
-enemy.speed(0)
-enemy.setposition(-200, 250)
+for enemy in enemies:
+    # enemy = turtle.Turtle()
+    enemy.color('red')
+    enemy.shape('circle')
+    enemy.penup()
+    enemy.speed(0)
+    x = random.randint(-200, 200)
+    y = random.randint(100, 250)
+    enemy.setposition(x, y)
 
 enemy_speed = 2
 
@@ -126,21 +138,38 @@ turtle.onkey(player_shoot, "space ")
 
 # main game loop
 while True:
-    # move the enemy
-    x = enemy.xcor()
-    x += enemy_speed
-    enemy.setx(x)
+    for enemy in enemies:
+        # move the enemy
+        x = enemy.xcor()
+        x += enemy_speed
+        enemy.setx(x)
 
-    if enemy.xcor() > 280:
-        enemy_speed *= -1  # change direction at boundary
-        y = enemy.ycor()
-        y -= 40  # drop down a level at boundary
-        enemy.sety(y)
-    elif enemy.xcor() < -280:
-        enemy_speed *= -1
-        y = enemy.ycor()
-        y -= 40
-        enemy.sety(y)
+        if enemy.xcor() > 280:
+            enemy_speed *= -1  # change direction at boundary
+            y = enemy.ycor()
+            y -= 40  # drop down a level at boundary
+            enemy.sety(y)
+        elif enemy.xcor() < -280:
+            enemy_speed *= -1
+            y = enemy.ycor()
+            y -= 40
+            enemy.sety(y)
+
+        if is_collision(bullet, enemy):
+            # reset the bullet
+            bullet.hideturtle()
+            bullet_state = 'ready'
+            bullet.setposition(0, -400)
+            # reset the enemy
+            x = random.randint(-200, 200)
+            y = random.randint(100, 250)
+            enemy.setposition(x, y)
+
+        if is_collision(enemy, player):
+            player.hideturtle()
+            enemy.hideturtle()
+            print('Game Over')
+            break
 
     # move the bullet if it is on the screen
     if bullet_state == 'fire':
@@ -150,20 +179,6 @@ while True:
         if bullet.ycor() > 280:
             bullet.hideturtle()
             bullet_state = 'ready'
-
-    if is_collision(bullet, enemy):
-        # reset the bullet
-        bullet.hideturtle()
-        bullet_state = 'ready'
-        bullet.setposition(0, -400)
-        # reset the enemy
-        enemy.setposition(-200, 250)
-
-    if is_collision(enemy, player):
-        player.hideturtle()
-        enemy.hideturtle()
-        print('Game Over')
-        break
 
 # turtle.done()
 # delay = input('Press enter to close')
