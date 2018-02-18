@@ -144,16 +144,19 @@ while True:
         x += enemy_speed
         enemy.setx(x)
 
+        # move the enemies down at the boundary
         if enemy.xcor() > 280:
             enemy_speed *= -1  # change direction at boundary
-            y = enemy.ycor()
-            y -= 40  # drop down a level at boundary
-            enemy.sety(y)
+            for enemy_inner in enemies:
+                y = enemy_inner.ycor()
+                y -= 40
+                enemy_inner.sety(y)
         elif enemy.xcor() < -280:
             enemy_speed *= -1
-            y = enemy.ycor()
-            y -= 40
-            enemy.sety(y)
+            for enemy_inner in enemies:
+                y = enemy_inner.ycor()
+                y -= 40
+                enemy_inner.sety(y)
 
         if is_collision(bullet, enemy):
             # reset the bullet
